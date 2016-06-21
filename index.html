@@ -6,6 +6,7 @@
     <meta name="description" content="Hello, World! • A-Frame">
     <script src="https://aframe.io/releases/0.2.0/aframe.min.js"></script>
     <script src="https://rawgit.com/ngokevin/aframe-text-component/master/dist/aframe-text-component.min.js"></script>
+    <script src="js/aframe-particle-system-component.js"></script>
   </head>
   <body>
     <a-scene>
@@ -20,12 +21,18 @@
       <a-cylinder position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
       <a-plane rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane> -->
 
+      <a-entity position="0 2.25 -15" particle-system="preset: dust"></a-entity>
+
       <a-entity text="text: Hello Tiny World!"  material="color: #66E1B4, shader: flat" position="-2 1 0" rotation="0 20 0"></a-entity>
       <a-entity mixin="smallTextSize" text="text: This is a tiny house demo" material="color: #cccccc" position="2 1.5 3" rotation="0 270 0"></a-entity>
       <a-entity mixin="smallTextSize" text="text: and you're able to explore this small space in VR" material="color: #cccccc" position="2 1.25 3" rotation="0 270 0"></a-entity>
       <a-collada-model src="#kitchen" position="0 -5 0"></a-collada-model>
 
-      <a-sky color="#ECCCEC"></a-sky>
+
+      <a-light color="#FFCC00" position="1 1 0" intensity="0.5"></a-light>
+      <a-light type="point" color="white" position="0 2.5 0" intensity="0.5"></a-light>
+      <a-light type="ambient" color="#222"></a-light>
+      <a-sky src="images/sky.jpg"></a-sky>
     </a-scene>
   </body>
 </html>
