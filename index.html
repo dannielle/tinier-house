@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello, World! • A-Frame</title>
+    <meta name="description" content="Hello, World! • A-Frame">
+    <script src="https://aframe.io/releases/0.2.0/aframe.min.js"></script>
+    <script src="https://rawgit.com/ngokevin/aframe-text-component/master/dist/aframe-text-component.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+
+      <a-assets>
+        <a-asset-item id="kitchen" src="models/kitchen.dae"></a-asset-item>
+        <a-mixin id="smallTextSize" text="size: 0.1"></a-mixin>
+      </a-assets>
+
+<!--       <a-sphere position="0 1.25 -1" radius="1.25" color="#EF2D5E"></a-sphere>
+      <a-cube position="-1 0.5 1" rotation="0 45 0" width="1" height="1" depth="1" color="#4CC3D9"></a-cube>
+      <a-cylinder position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+      <a-plane rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane> -->
+
+      <a-entity text="text: Hello Tiny World!"  material="color: #66E1B4, shader: flat" position="-2 1 0" rotation="0 20 0"></a-entity>
+      <a-entity mixin="smallTextSize" text="text: This is a tiny house demo" material="color: #cccccc" position="2 1.5 3" rotation="0 270 0"></a-entity>
+      <a-entity mixin="smallTextSize" text="text: and you're able to explore this small space in VR" material="color: #cccccc" position="2 1.25 3" rotation="0 270 0"></a-entity>
+      <a-collada-model src="#kitchen" position="0 -5 0"></a-collada-model>
+
+      <a-sky color="#ECCCEC"></a-sky>
+    </a-scene>
+  </body>
+</html>
