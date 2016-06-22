@@ -7,21 +7,70 @@
     <script src="https://aframe.io/releases/0.2.0/aframe.min.js"></script>
     <script src="https://rawgit.com/ngokevin/aframe-text-component/master/dist/aframe-text-component.min.js"></script>
     <script src="js/aframe-particle-system-component.js"></script>
+    <script src="js/aframe-extras.min.js"></script>
+
+    <script>
+(function() {
+'use strict';
+
+var alongpathComp = {
+  schema: {
+    path     : { default: ''    },
+    closed   : { default: false },
+    dur      : { default: 1000  }
+  },
+
+  init: function() {
+    var ent = this.el;
+    var d = this.data;
+    var points = d.path.split(' ').map(function(p) {
+        p = p.split(',');
+        return new THREE.Vector3(
+            parseFloat(p[0]),
+            parseFloat(p[1]),
+            parseFloat(p[2])
+        );
+    });
+    var ctor = d.closed ? 'ClosedSplineCurve3' : 'SplineCurve3';
+    var curve = new THREE[ctor](points);
+
+    var onFrame = function onFrame(t) {
+      window.requestAnimationFrame(onFrame);
+      t = t % d.dur;
+      var i = t / d.dur;
+      try {
+        var p = curve.getPoint(i);
+        ent.setAttribute('position', p);
+      } catch (ex) {}
+    };
+
+    onFrame();
+  },
+
+  update: function(oldData) {},
+
+  remove: function() {}
+};
+
+AFRAME.registerComponent('alongpath', alongpathComp);
+
+})();
+  </script>
   </head>
   <body>
-    <a-scene>
+    <a-scene physics>
 
       <a-assets>
         <a-asset-item id="kitchen" src="models/kitchen.dae"></a-asset-item>
         <a-mixin id="smallTextSize" text="size: 0.1"></a-mixin>
       </a-assets>
 
-      <a-cube position="0 2 8" rotation="0 45 0" width="1" height="1" depth="1" color="#4CC3D9">
+      <a-box position="0 2 8" rotation="0 45 0" width="1" height="1" depth="1" color="#4CC3D9">
         <a-animation 
           attribute="rotation" 
           begin="click" 
           to="0 315 0"></a-animation>
-      </a-cube>
+      </a-box>
 
       <a-entity position="0 2.25 -15" particle-system="preset: dust"></a-entity>
 
@@ -33,7 +82,7 @@
       <a-entity mixin="smallTextSize" text="text: Stare at the cube" material="color: #cccccc" position="2 2 8" rotation="0 180 0"></a-entity>
 
 
-      <a-collada-model src="#kitchen" position="0 -5 0"></a-collada-model>
+      <a-collada-model src="#kitchen" static-body position="0 -5 0"></a-collada-model>
 
 
       <a-light color="#FFCC00" position="1 1 0" intensity="0.5"></a-light>
@@ -41,8 +90,9 @@
       <a-light type="ambient" color="#222"></a-light>
       <a-sky src="images/sky.jpg"></a-sky>
 
-      <a-entity position="0 2 5">
-        <a-entity camera look-controls>
+      <a-entity position="0 2 5"
+        alongpath="path:-1,1,3 -3,3,0 -1,1,-5 2,3,0 2,1,2; closed:true; dur:50000">
+        <a-entity camera look-controls id="player">
           <a-cursor color="#2E3A87">
         </a-entity>
       </a-entity>
