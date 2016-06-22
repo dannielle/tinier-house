@@ -16,16 +16,23 @@
         <a-mixin id="smallTextSize" text="size: 0.1"></a-mixin>
       </a-assets>
 
-<!--       <a-sphere position="0 1.25 -1" radius="1.25" color="#EF2D5E"></a-sphere>
-      <a-cube position="-1 0.5 1" rotation="0 45 0" width="1" height="1" depth="1" color="#4CC3D9"></a-cube>
-      <a-cylinder position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-      <a-plane rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane> -->
+      <a-cube position="0 2 8" rotation="0 45 0" width="1" height="1" depth="1" color="#4CC3D9">
+        <a-animation 
+          attribute="rotation" 
+          begin="click" 
+          to="0 315 0"></a-animation>
+      </a-cube>
 
       <a-entity position="0 2.25 -15" particle-system="preset: dust"></a-entity>
 
-      <a-entity text="text: Hello Tiny World!"  material="color: #66E1B4, shader: flat" position="-2 1 0" rotation="0 20 0"></a-entity>
+      <a-entity text="text: Hello Tiny World!"  material="color: #66E1B4, shader: flat" position="-2 1 0" rotation="0 20 0">
+        <a-animation attribute="rotation" begin="0" repeat="indefinite" to="360 20 0"></a-animation>
+      </a-entity>
       <a-entity mixin="smallTextSize" text="text: This is a tiny house demo" material="color: #cccccc" position="2 1.5 3" rotation="0 270 0"></a-entity>
       <a-entity mixin="smallTextSize" text="text: and you're able to explore this small space in VR" material="color: #cccccc" position="2 1.25 3" rotation="0 270 0"></a-entity>
+      <a-entity mixin="smallTextSize" text="text: Stare at the cube" material="color: #cccccc" position="2 2 8" rotation="0 180 0"></a-entity>
+
+
       <a-collada-model src="#kitchen" position="0 -5 0"></a-collada-model>
 
 
@@ -33,6 +40,12 @@
       <a-light type="point" color="white" position="0 2.5 0" intensity="0.5"></a-light>
       <a-light type="ambient" color="#222"></a-light>
       <a-sky src="images/sky.jpg"></a-sky>
+
+      <a-entity position="0 2 5">
+        <a-entity camera look-controls>
+          <a-cursor color="#2E3A87">
+        </a-entity>
+      </a-entity>
     </a-scene>
   </body>
 </html>
