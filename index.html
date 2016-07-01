@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello, World! • A-Frame</title>
+    <meta name="description" content="Hello, World! • A-Frame">
+    <script src="https://aframe.io/releases/0.2.0/aframe.min.js"></script>
+    <script src="https://rawgit.com/ngokevin/aframe-text-component/master/dist/aframe-text-component.min.js"></script>
+    <script src="js/aframe-particle-system-component.js"></script>
+    <script src="js/aframe-extras.min.js"></script>
+  </head>
+  <body>
+    <a-scene id="scene" physics>
+
+      <a-assets>
+        <video id="morning" autoplay loop="true" src="videos/morning.mp4" webkit-playsinline></video>
+        <video id="coffee" autoplay loop="true" src="videos/coffee.mp4" webkit-playsinline></video>
+        <video id="water" autoplay loop="true" src="videos/water.mp4" webkit-playsinline></video>
+      </a-assets>
+
+      <a-box id="water-model" position="3.5 -4 -2" width="1" height="1" depth="1" color="#FFFFFF"></a-box>
+
+      <a-box id="coffee-model" position="-3.5 -4 -2" width="1" height="1" depth="1" color="#FF0000"></a-box>
+
+      <a-light type="point" color="white" position="0 2.5 0" intensity="0.5"></a-light>
+      <a-light type="ambient" color="#222"></a-light>
+
+      <a-entity position="0 2 5">
+        <a-entity camera look-controls id="player">
+          <a-cursor color="#FFFFFF">
+        </a-entity>
+      </a-entity>
+
+      <a-videosphere id="vs" src="#morning" rotation="0 90 0"></a-videosphere>
+
+    </a-scene>
+  </body>
+  <script>
+      var sceneEl = document.getElementsByTagName('a-scene')[0];
+
+      sceneEl.addEventListener('loaded', function() {
+        console.log("gets here")
+
+        var vs = document.querySelector("#vs");
+
+        document.querySelector("#water-model").addEventListener("mouseenter", function() {
+          console.log("water");
+          vs.emit("choseWater");
+        });
+        document.querySelector("#coffee-model").addEventListener("mouseenter", function() {
+          console.log("coffee");
+          vs.emit("choseCoffee");
+        });
+
+        vs.addEventListener("choseWater", function() {
+          console.log("water again");
+          vs.setAttribute("src", "#water");
+        });
+        vs.addEventListener("choseCoffee", function() {
+          console.log("coffee again");
+          vs.setAttribute("src", "#coffee");
+        })
+
+      });
+
+  </script>
+</html>
