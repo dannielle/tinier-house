@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello, World! • A-Frame</title>
+    <meta name="description" content="Hello, World! • A-Frame">
+    <script src="https://aframe.io/releases/0.2.0/aframe.min.js"></script>
+    <script src="https://rawgit.com/ngokevin/aframe-text-component/master/dist/aframe-text-component.min.js"></script>
+    <script src="js/aframe-particle-system-component.js"></script>
+    <script src="js/aframe-extras.min.js"></script>
+
+    <script>
+      var sceneEl = document.getElementsByTagName('a-scene')[0];
+      console.log("got it")
+
+      sceneEl.addEventListener('loaded', function() {
+        console.log("gets here")
+
+        document.querySelector('#boxx').setAttribute("color", "#FF0000");
+        document.querySelector('#boxx').emit('change');
+        document.querySelector('#boxx').addEventListener("mouseenter", function() {
+          console.log("click event fired");
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <a-scene id="scene" physics>
+
+      <a-assets>
+        <video id="city1" autoplay loop="false" src="videos/city1.mp4">
+        <!-- <video id="city2" autoplay loop="false" src="videos/city2.mp4"> -->
+      </a-assets>
+
+      <a-box id="boxx" position="2 2 2" rotation="0 45 0" width="1" height="1" depth="1" color="#4CC3D9">
+        <!-- <a-event name="mouseenter" scale="3 1 1" color="#FFC65D"></a-event> -->
+        <a-event name="mouseleave" scale="1 1 1" color="#F16745"></a-event>
+      </a-box>
+
+      <a-video src="#city1" width="16" height="9" position="0 0 -20"></a-video>
+
+      <a-light color="#FFCC00" position="1 1 0" intensity="0.5"></a-light>
+      <a-light type="point" color="white" position="0 2.5 0" intensity="0.5"></a-light>
+      <a-light type="ambient" color="#222"></a-light>
+      <a-sky src="images/sky.jpg"></a-sky>
+
+      <a-entity position="0 2 5">
+        <a-entity camera look-controls id="player">
+          <a-cursor color="#2E3A87">
+        </a-entity>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>

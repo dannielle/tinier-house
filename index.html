@@ -10,92 +10,122 @@
     <script src="js/aframe-extras.min.js"></script>
 
     <script>
-(function() {
-'use strict';
+    (function() {
+    'use strict';
 
-var alongpathComp = {
-  schema: {
-    path     : { default: ''    },
-    closed   : { default: false },
-    dur      : { default: 1000  }
-  },
+    var alongpathComp = {
+      schema: {
+        path     : { default: ''    },
+        closed   : { default: false },
+        dur      : { default: 1000  }
+      },
 
-  init: function() {
-    var ent = this.el;
-    var d = this.data;
-    var points = d.path.split(' ').map(function(p) {
-        p = p.split(',');
-        return new THREE.Vector3(
-            parseFloat(p[0]),
-            parseFloat(p[1]),
-            parseFloat(p[2])
-        );
-    });
-    var ctor = d.closed ? 'ClosedSplineCurve3' : 'SplineCurve3';
-    var curve = new THREE[ctor](points);
+      init: function() {
+        var ent = this.el;
+        var d = this.data;
+        var points = d.path.split(' ').map(function(p) {
+            p = p.split(',');
+            return new THREE.Vector3(
+                parseFloat(p[0]),
+                parseFloat(p[1]),
+                parseFloat(p[2])
+            );
+        });
+        var ctor = d.closed ? 'ClosedSplineCurve3' : 'SplineCurve3';
+        var curve = new THREE[ctor](points);
 
-    var onFrame = function onFrame(t) {
-      window.requestAnimationFrame(onFrame);
-      t = t % d.dur;
-      var i = t / d.dur;
-      try {
-        var p = curve.getPoint(i);
-        ent.setAttribute('position', p);
-      } catch (ex) {}
+        var onFrame = function onFrame(t) {
+          window.requestAnimationFrame(onFrame);
+          t = t % d.dur;
+          var i = t / d.dur;
+          try {
+            var p = curve.getPoint(i);
+            ent.setAttribute('position', p);
+          } catch (ex) {}
+        };
+
+        onFrame();
+      },
+
+      update: function(oldData) {},
+
+      remove: function() {}
     };
 
-    onFrame();
-  },
+    AFRAME.registerComponent('alongpath', alongpathComp);
 
-  update: function(oldData) {},
+    })();
 
-  remove: function() {}
-};
-
-AFRAME.registerComponent('alongpath', alongpathComp);
-
-})();
   </script>
   </head>
   <body>
-    <a-scene physics>
+    <a-scene id="scene" physics>
 
       <a-assets>
-        <a-asset-item id="kitchen" src="models/kitchen.dae"></a-asset-item>
-        <a-mixin id="smallTextSize" text="size: 0.1"></a-mixin>
+        <video id="morning" autoplay loop="true" src="videos/morning.mp4" webkit-playsinline></video>
+        <video id="coffee" autoplay loop="true" src="videos/coffee.mp4" webkit-playsinline></video>
+        <video id="water" autoplay loop="true" src="videos/water.mp4" webkit-playsinline></video>
       </a-assets>
 
-      <a-box position="0 2 8" rotation="0 45 0" width="1" height="1" depth="1" color="#4CC3D9">
-        <a-animation 
-          attribute="rotation" 
-          begin="click" 
-          to="0 315 0"></a-animation>
-      </a-box>
+      <a-box id="water-model" position="3.5 -4 -2" width="1" height="1" depth="1" color="#FFFFFF"></a-box>
 
-      <a-entity position="0 2.25 -15" particle-system="preset: dust"></a-entity>
+      <a-box id="coffee-model" position="-3.5 -4 -2" width="1" height="1" depth="1" color="#FF0000"></a-box>
 
-      <a-entity text="text: Hello Tiny World!"  material="color: #66E1B4, shader: flat" position="-2 1 0" rotation="0 20 0">
-        <a-animation attribute="rotation" begin="0" repeat="indefinite" to="360 20 0"></a-animation>
-      </a-entity>
-      <a-entity mixin="smallTextSize" text="text: This is a tiny house demo" material="color: #cccccc" position="2 1.5 3" rotation="0 270 0"></a-entity>
-      <a-entity mixin="smallTextSize" text="text: and you're able to explore this small space in VR" material="color: #cccccc" position="2 1.25 3" rotation="0 270 0"></a-entity>
-      <a-entity mixin="smallTextSize" text="text: Stare at the cube" material="color: #cccccc" position="2 2 8" rotation="0 180 0"></a-entity>
-
-
-      <a-collada-model src="#kitchen" static-body position="0 -5 0"></a-collada-model>
-
-
-      <a-light color="#FFCC00" position="1 1 0" intensity="0.5"></a-light>
       <a-light type="point" color="white" position="0 2.5 0" intensity="0.5"></a-light>
       <a-light type="ambient" color="#222"></a-light>
-      <a-sky src="images/sky.jpg"></a-sky>
 
-      <a-entity position="0 2 5"
-        alongpath="path:-1,1,3 -3,3,0 -1,1,-5 2,3,0 2,1,2; closed:true; dur:50000">
+      <a-entity position="0 2 5">
         <a-entity camera look-controls id="player">
-          <a-cursor color="#2E3A87">
+          <a-cursor color="#FFFFFF">
         </a-entity>
       </a-entity>
+
+      <a-videosphere id="vs" src="#morning" rotation="0 90 0"></a-videosphere>
+
     </a-scene>
   </body>
+  <script>
+      var sceneEl = document.getElementsByTagName('a-scene')[0];
+
+      sceneEl.addEventListener('loaded', function() {
+        console.log("gets here")
+
+        var vs = document.querySelector("#vs");
+
+        document.querySelector("#water-model").addEventListener("mouseenter", function() {
+          console.log("water");
+          vs.emit("choseWater");
+        });
+        document.querySelector("#coffee-model").addEventListener("mouseenter", function() {
+          console.log("coffee");
+          vs.emit("choseCoffee");
+        });
+
+        vs.addEventListener("choseWater", function() {
+          console.log("water again");
+          vs.setAttribute("src", "#water");
+        });
+        vs.addEventListener("choseCoffee", function() {
+          console.log("coffee again");
+          vs.setAttribute("src", "#coffee");
+        })
+
+
+        // document.querySelector('#boxx').addEventListener("mouseenter", function() {
+          // console.log("click event fired");
+        //   // document.querySelector('#sky').emit("someEvent");
+        //   document.querySelector('#city').emit("someEvent");
+        // });
+        // document.querySelector('#sky').addEventListener("someEvent", function() {
+        //   console.log("someEvent fired");
+        //   document.querySelector('#sky').setAttribute("src", "images/IMG_7782.jpg");
+        // });
+        // document.querySelector('#city').addEventListener("someEvent", function() {
+        //   console.log("someEvent fired on city");
+        //   document.querySelector('#city').setAttribute("src", "#city2");
+        // });
+
+      });
+
+  </script>
 </html>
